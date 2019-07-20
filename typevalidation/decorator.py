@@ -3,7 +3,7 @@
 typevalidation/decorator.py
 
 written by: Oliver Cordes 2019-07-01
-changed by: Oliver Cordes 2019-07-05
+changed by: Oliver Cordes 2019-07-20
 
 """
 
@@ -29,9 +29,8 @@ class typevalidate(object):
 
         @wraps(func)
         def wrap(*args, **kwargs):
-            print(msg)
-            print(id(self))
-            print(func.__annotations__)
+            #print(msg)
+            #print(func.__annotations__)
             args, kwargs = self.convert(args, kwargs, func.__annotations__)
             return func(*args, **kwargs)
 
@@ -40,24 +39,35 @@ class typevalidate(object):
 
     def convert(self, args, kwargs, newtypes):
         newtypesargs = [ val for key,val in newtypes.items()]
-        print(newtypesargs)
+
         # converting args, iterating over indices...
         if self._isclass:
             indx = 1
         else:
             indx = 0
 
+        # sanity checks
+        if len(newtypesargs) != (len(args)+len(kwargs)-indx):
+            print('WARNING: Number of annotations doesn\'t match the number of arguments!')
+            return args, kwargs
+
+        #print(newtypesargs)
+
         tindx = 0
+        args = list(args)
         while indx < len(args):
-            print(type(args[indx]))
+            #print(indx, type(args[indx]))
             newval = self.converttype(args[indx], newtypesargs[tindx])
+            args[indx] = newval
             indx += 1
             tindx += 1
         return args, kwargs
 
 
     def converttype(self, val, newtype):
-        if newtype in basic_types:
-            return newtype(val)
-        else:
-            return newtype(val)
+        # do the real type conversion
+        return newtype(val)
+        #if newtype in basic_types:
+        #    return newtype(val)
+        #else:
+        #    return newtype(val)
