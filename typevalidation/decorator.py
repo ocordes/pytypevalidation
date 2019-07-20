@@ -66,7 +66,10 @@ class typevalidate(object):
 
     def converttype(self, val, newtype):
         # do the real type conversion
-        return newtype(val)
+        if newtype is None:
+            return val
+        else:
+            return newtype(val)
         #if newtype in basic_types:
         #    return newtype(val)
         #else:
