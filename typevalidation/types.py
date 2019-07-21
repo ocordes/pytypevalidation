@@ -3,7 +3,7 @@
 typevalidation/types.py
 
 written by: Oliver Cordes 2019-07-04
-changed by: Oliver Cordes 2019-07-19
+changed by: Oliver Cordes 2019-07-21
 
 
 """
@@ -34,6 +34,7 @@ def PosFloat(x):
     if x < 0:
         raise ValueError('Float needs to be positive')
 
+    return x
 
 
 def Vector(x):
