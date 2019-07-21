@@ -47,7 +47,10 @@ class typevalidate(object):
             indx = 0
 
         # sanity checks
-        if len(newtypesargs) != (len(args)+len(kwargs)-indx):
+        # not perfect, since we cannot handle the case that there is a
+        # annotation missing and if there are more parameters given in the
+        # call than defined ...
+        if len(newtypesargs) < (len(args)+len(kwargs)-indx):
             print('WARNING: Number of annotations doesn\'t match the number of arguments!')
             return args, kwargs
 
