@@ -1,10 +1,13 @@
+#
+# typevalidation/types.py
+#
+# written by: Oliver Cordes 2019-07-04
+# changed by: Oliver Cordes 2019-07-22
+#
+
 """
 
-typevalidation/types.py
-
-written by: Oliver Cordes 2019-07-04
-changed by: Oliver Cordes 2019-07-22
-
+Typevalidation types
 
 """
 
@@ -37,25 +40,48 @@ def PosFloat(x):
     return x
 
 
-def Vector(x):
+def _Vector(x, dim):
     if isinstance(x, (list, tuple)):
-        if len(x) == 3:
+        if len(x) == dim:
             return np.array(x, dtype=np.float64)
         else:
-            raise TypeError('List/tuple needs 3 entries for a vector')
+            raise TypeError('List/tuple needs %i entries for a vector' % dim)
     elif isinstance(x, np.ndarray):
-        if x.shape == (3,):
+        if x.shape == (dim,):
             return x.copy()
         else:
-            raise TypeError('numpy array needs 3 entries for a vector')
+            raise TypeError('numpy array needs %i entries for a vector' % dim)
     elif isinstance(x, str):
         s = x.split(',')
-        if len(s) == 3:
+        if len(s) == dim:
             return np.array([float(i) for i in s], dtype=np.float64)
         else:
-            raise TypeError('string array needs 3 entries for a vector')
+            raise TypeError('string array needs %i entries for a vector' % dim)
     else:
         raise TypeError('x is not of a suitable type for a vector')
+
+
+def Vector3d(x):
+    """
+    Does a type conversion into a Vector in 3D.
+
+    Arguments
+    ---------
+    x:
+        convert x to a 3d-numpy-array
+
+    Returns
+    -------
+    numpy.ndarray
+        the converted input
+
+    """
+
+    return _Vector(x, 3)
+
+
+def Vector2d(x):
+    return _Vector(x, 2)
 
 
 # check if x is a 3x3 matrix
